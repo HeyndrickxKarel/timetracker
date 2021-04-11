@@ -1,0 +1,75 @@
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+
+input[type="number"]{
+    width: 70px;
+    
+}
+
+.form-control {
+    color: #869ab8;
+    border: none;
+    border-bottom: 1px solid transparent;
+    transition: 0.2;
+
+    &:focus{
+        border-bottom: 1px solid #ced4da;
+        box-shadow: none;
+    }
+}
+
+body{
+    font-family: "poppins";
+    background-color: rgb(243, 247, 250);
+    color: #2a354f;
+    width: 720px;
+    height: 720px;
+    padding: 40px;
+}
+.green {
+    color: #11ab7c;
+}
+
+.hour-divider{
+    margin: 0 5px;
+}
+.time-divider{
+    margin: 0 15px;
+}
+
+.project-overview {
+    &-details{
+        .delete-icon {
+            transition: 0.2s;
+            opacity: 0;
+            cursor: pointer;
+        }
+        &:hover{
+            .delete-icon{
+                opacity: 1;
+            }
+        }
+    }
+    
+}
+
+@keyframes fly-in {
+	0% {
+		transform: scale(0.97);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.02);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.fly-in.au-enter-active {
+	animation: fly-in 0.5s;
+}
+.fly-out.au-leave-active {
+	animation: fly-in 0.5s reverse;
+}
