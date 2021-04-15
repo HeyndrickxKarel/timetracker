@@ -2,6 +2,7 @@
   <require from="./style.css"></require>
   <require from="./resources/attributes/enter-press"></require>
   <require from="./resources/value-converters/moment-format"></require>
+  <require from="./resources/value-converters/numeral-format"></require>
   <h1 class="mb-4">Timetrackerrr</h1>
 
   <h6>Duurtijd</h6>
@@ -52,6 +53,10 @@
   <ul class="list-group">
     <li repeat.for="item of activitiesToday" class="au-animate fly-in fly-out list-group-item d-flex justify-content-between project-overview">
       <span>${item.project.name}</span>
+      <span class="timetamp timestamp-total">
+        <font-awesome-icon class="mr-1" icon.bind="['fas','stopwatch']"></font-awesome-icon> 
+        ${item.totalHours | numeralFormat:'00'}u${item.totalMinutes | numeralFormat:'00'}
+      </span>
       <div>
 
         <div repeat.for="activity of item.activities" class="d-flex justify-content-end align-items-center flex-nowrap project-overview-details">
@@ -59,11 +64,11 @@
           <span class="text-danger mr-2">
             <font-awesome-icon class="delete-icon" click.delegate="deleteActivity(activitiesToday, item, $index)" icon.bind="['fas','times-circle']"></font-awesome-icon> 
           </span>
-          <span>${activity.startTime | momentFormat:'HH:mm'}</span>
+          <span class="timestamp timestamp-left">${activity.startTime | momentFormat:'HHumm'}</span>
           <span class="mx-2">
             <font-awesome-icon icon.bind="['fas','arrow-right']"></font-awesome-icon> 
           </span>
-          <span>${activity.endTime | momentFormat:'HH:mm'}</span>         
+          <span class="timestamp timestamp-right">${activity.endTime | momentFormat:'HHumm'}</span>         
       </span>
     </li>
   </ul>

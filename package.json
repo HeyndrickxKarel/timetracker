@@ -16,7 +16,8 @@
     "aurelia-fontawesome": "^1.0.0-beta.1",
     "bootstrap": "^4.6.0",
     "font-awesome": "^4.7.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "numeral": "^2.0.6"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

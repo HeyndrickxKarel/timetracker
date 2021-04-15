@@ -2,8 +2,11 @@ import {Aurelia} from 'aurelia-framework';
 import environment from './environment';
 import { PLATFORM } from "aurelia-pal";
 import {
-	faArrowRight, faTimesCircle,
+	faArrowRight, faStopwatch, faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import * as numeral from "numeral";
+import "numeral/locales/nl-be";
+
 export function configure(aurelia: Aurelia): void {
   aurelia.use
     .standardConfiguration()
@@ -11,10 +14,14 @@ export function configure(aurelia: Aurelia): void {
     .plugin(PLATFORM.moduleName("aurelia-fontawesome"), {
 			icons: [
         faArrowRight,
-        faTimesCircle
+        faTimesCircle,
+        faStopwatch
 			],
 		})
     .feature('resources');
+
+    numeral.locale("nl-BE");
+
 
   aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn');
 

@@ -4,6 +4,7 @@ import { Project } from "resources/models/project";
 import { Activity } from "resources/models/activity";
 import moment = require("moment");
 import { ProjectOverview } from "resources/models/project-overview";
+import {BindingEngine} from 'aurelia-framework';
 
 @autoinject
 export class App {
@@ -27,7 +28,7 @@ export class App {
   public activitiesToday: ProjectOverview[] = [];
   public activitiesBefore: ProjectOverview[] = [];
 
-  public constructor(private taskQueue: TaskQueue){
+  public constructor(private taskQueue: TaskQueue, private be: BindingEngine){
     this.loadDataFromStorage();
     if(this.dc.lastActivity && this.dc.lastActivity.endTime.format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')){
       this.setFields(this.dc.lastActivity);   
@@ -162,13 +163,15 @@ export class App {
     if(overview){
       overview.activities.push(activity);
     } else {
-      list.push({project: activity.project, activities: [activity]} as ProjectOverview);
+      let po = new ProjectOverview(this.be, [activity], activity.project);
+      list.push(po);
     }
   }
 
   public deleteActivity(list: ProjectOverview[], projectOverview: ProjectOverview, index: number){
       let activity = projectOverview.activities.splice(index, 1)[0];
       if(projectOverview.activities.length == 0){
+        projectOverview.dispose();
         let indexOfOverview = list.indexOf(projectOverview);
         list.splice(indexOfOverview, 1);
       }
@@ -176,4 +179,5 @@ export class App {
       this.dc.activities.splice(indexInDc, 1);
       this.saveDataToStorage();
   }
+
 }
