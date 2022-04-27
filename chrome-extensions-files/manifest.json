@@ -1,12 +1,12 @@
 {
   "name": "Timetracker",
   "version": "0.01",
-  "description": "Hiermee kan je doorheen je dag snel ingeven hoeveel uren je gewerkt heb voor een bepaald item om dan op het einde van de dag een mooi overzicht te krijgen.",
+  "description": "Register your worked hours throughout your day and get a nice overview afterwards!",
 	"browser_action": {
 		"default_title": "Timetracker HTML",
 		"default_popup": "index.html"
 	},
-  "manifest_version": 2,
+  "manifest_version": 3,
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
