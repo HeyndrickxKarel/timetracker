@@ -2,7 +2,8 @@ import {Aurelia} from 'aurelia-framework';
 import environment from './environment';
 import { PLATFORM } from "aurelia-pal";
 import {
-	faArrowRight, faStopwatch, faTimesCircle,
+  faArrowLeft,
+	faArrowRight, faCog, faHistory, faStopwatch, faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import * as numeral from "numeral";
 import "numeral/locales/nl-be";
@@ -15,7 +16,10 @@ export function configure(aurelia: Aurelia): void {
 			icons: [
         faArrowRight,
         faTimesCircle,
-        faStopwatch
+        faStopwatch,
+        faCog,
+        faArrowLeft,
+        faHistory
 			],
 		})
     .feature('resources');

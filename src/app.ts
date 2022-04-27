@@ -5,6 +5,7 @@ import { Activity } from "resources/models/activity";
 import moment = require("moment");
 import { ProjectOverview } from "resources/models/project-overview";
 import {BindingEngine} from 'aurelia-framework';
+import { HistoryOverview } from "resources/models/history-overview";
 
 @autoinject
 export class App {
@@ -27,6 +28,12 @@ export class App {
 
   public activitiesToday: ProjectOverview[] = [];
   public activitiesBefore: ProjectOverview[] = [];
+
+  public viewProjects: boolean = false;
+  public viewHistory: boolean = false;
+  public viewOverview: boolean = true;
+
+  public historyOverviews: HistoryOverview[] = [];
 
   public constructor(private taskQueue: TaskQueue, private be: BindingEngine){
     this.loadDataFromStorage();
@@ -107,7 +114,8 @@ export class App {
   }
 
   public focusNewLine(){
-    document.getElementById("startHour").focus();
+    if(this.viewOverview)
+      document.getElementById("startHour").focus();
   }
 
   public setFields(previousActivity? : Activity){
@@ -180,4 +188,55 @@ export class App {
       this.saveDataToStorage();
   }
 
+  public goToProjects(){
+    this.viewProjects = true;
+    this.viewHistory = false;
+    this.viewOverview = false;
+
+  }
+
+  public goToOverview(){
+    this.viewOverview = true;
+    this.viewProjects = false;
+    this.viewHistory = false;
+  }
+
+  public goToHistory(){
+    this.viewHistory = true;
+    this.viewOverview = false;
+    this.viewProjects = false;
+
+    this.setHistory();
+  }
+
+  public deleteProject(project: Project){
+    let index = this.dc.projects.indexOf(project);
+    console.log(index);
+    this.dc.projects.splice(index, 1);
+    this.saveDataToStorage();
+  }
+
+  public setHistory(){
+    this.historyOverviews = [];
+    let dates = this.dc.activities.map(a => a.endTime);
+    let minDate = moment(moment.min(dates));
+
+    let today = moment();
+    while (today.isSameOrAfter(minDate, "day")) {
+      console.log(today);
+      this.dc.activities.forEach(element => {
+        console.log(element.endTime);
+        console.log("equals today " + element.endTime.isSame(today, "day"));
+      });
+      let activies = this.dc.activities.filter(a => moment(a.endTime).isSame(today, "day")).sort((a, b) => a.startTime.valueOf() - b.startTime.valueOf());
+      if(activies.length > 0){
+        const overview = {
+          date: moment(today), 
+          activities: activies
+        } as HistoryOverview
+        this.historyOverviews.push(overview);
+      }
+      today = today.add(-1, "day");
+    }
+  }
 }

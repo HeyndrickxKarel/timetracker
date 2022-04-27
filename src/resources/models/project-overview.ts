@@ -1,6 +1,6 @@
 import { Activity } from "./activity";
 import { Project } from "./project";
-import {BindingEngine} from 'aurelia-framework';
+import { BindingEngine } from 'aurelia-framework';
 import { Disposable, observable } from "aurelia-framework";
 
 export class ProjectOverview {
@@ -12,7 +12,6 @@ export class ProjectOverview {
     public subscription: Disposable
 
     public constructor(private be: BindingEngine, activities: Activity[], project: Project) {
-        console.log("constructed");
         this.activities = activities;
         this.project = project;
 

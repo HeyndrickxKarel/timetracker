@@ -37,19 +37,28 @@ body{
 }
 
 .project-overview {
-    &-details{
-        .delete-icon {
-            transition: 0.2s;
-            opacity: 0;
-            cursor: pointer;
-        }
-        &:hover{
-            .delete-icon{
-                opacity: 1;
-            }
-        }
+    .delete-icon {
+        transition: 0.2s;
+        opacity: 0;
+        cursor: pointer;
     }
-    
+    &:hover{
+        .delete-icon{
+            opacity: 1;
+        }
+    }        
+}
+
+.project-edit {
+    .delete-icon {
+        cursor: pointer;
+    }  
+}
+
+.history-edit {
+    .delete-icon {
+        cursor: pointer;
+    }  
 }
 
 @keyframes fly-in {
@@ -88,5 +97,13 @@ body{
         position: absolute;
         width: 80px;
         left: calc(50% - 40px);
+    }
+}
+
+.clickable-icon{
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover {
+        color:#11ab7c;
     }
 }

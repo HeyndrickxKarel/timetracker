@@ -5,71 +5,114 @@
   <require from="./resources/value-converters/numeral-format"></require>
   <h1 class="mb-4">Timetrackerrr</h1>
 
-  <h6>Duurtijd</h6>
-  <div class="d-flex align-items-center mb-4">
-    <div class="d-flex align-items-center">
-      <div>
-        <input id="startHour" min="0" max="23" value.bind="startHour" type="number" class="form-control">
+  
+  <div class="au-animate fly-in" if.bind="viewOverview">
+    <h6>Duurtijd</h6>
+    <div class="d-flex align-items-center mb-4">
+      <div class="d-flex align-items-center">
+        <div>
+          <input id="startHour" min="0" max="23" value.bind="startHour" type="number" class="form-control">
+        </div>
+        <span class="hour-divider">u</span>
+        <div >
+          <input min="0" max="59" value.bind="startMinute" type="number" class="form-control">
+        </div>
       </div>
-      <span class="hour-divider">u</span>
-      <div >
-        <input min="0" max="59" value.bind="startMinute" type="number" class="form-control">
-      </div>
-    </div>
-    <span class="time-divider">
-        <font-awesome-icon icon.bind="['fas','arrow-right']"></font-awesome-icon> 
-    </span>
-    
-    <div class="d-flex align-items-center">
-      <div>
-        <input min="0" max="23" value.bind="endHour" type="number" class="form-control">
-      </div>
-      <span class="hour-divider">u</span>
-      <div >
-        <input min="0" max="59" value.bind="endMinute" type="number" class="form-control">
-      </div>
-    </div>
-   
-  </div>
-  <h6>Project</h6>
-  <div class="row mb-4">
-    <div class="col-6">
-      <input value.bind="projectName" keydown.trigger="keyDownInProjectName($event)"  type="text"
-      class="form-control auto-suggestion-first">
-    </div>
-    <div class="col-6 d-flex align-items-center">
-      <span class="d-flex align-items-center flex-nowrap">
-        <span class="green">${suggestedProjectCorrect}</span>
-        <span>${suggestedProjectRemaining}</span>
+      <span class="time-divider">
+          <font-awesome-icon icon.bind="['fas','arrow-right']"></font-awesome-icon> 
       </span>
+      
+      <div class="d-flex align-items-center">
+        <div>
+          <input min="0" max="23" value.bind="endHour" type="number" class="form-control">
+        </div>
+        <span class="hour-divider">u</span>
+        <div >
+          <input min="0" max="59" value.bind="endMinute" type="number" class="form-control">
+        </div>
+      </div>
      
     </div>
-    
-  </div>
-  <button class="btn btn-success mb-4" click.delegate="submit()">Voeg toe</button>
-
-  <h6 class="au-animate fly-in fly-out" if.bind="activitiesToday.length > 0">Vandaag</h6>
-
-  <ul class="list-group">
-    <li repeat.for="item of activitiesToday" class="au-animate fly-in fly-out list-group-item d-flex justify-content-between project-overview">
-      <span>${item.project.name}</span>
-      <span class="timetamp timestamp-total">
-        <font-awesome-icon class="mr-1" icon.bind="['fas','stopwatch']"></font-awesome-icon> 
-        ${item.totalHours | numeralFormat:'00'}u${item.totalMinutes | numeralFormat:'00'}
+    <div class="d-flex align-items-center mb-2">
+      <h6 class="mr-2 mb-0">Project</h6>
+      <span class="clickable-icon mr-2" click.delegate="goToProjects()">
+        <font-awesome-icon icon.bind="['fas','cog']"></font-awesome-icon>
       </span>
-      <div>
+      <span class="clickable-icon" click.delegate="goToHistory()">
+        <font-awesome-icon icon.bind="['fas','history']"></font-awesome-icon>
+      </span>
+    </div>
+    <div class="row mb-4">
+      <div class="col-6">
+        <input value.bind="projectName" keydown.trigger="keyDownInProjectName($event)"  type="text"
+        class="form-control auto-suggestion-first">
+      </div>
+      <div class="col-6 d-flex align-items-center">
+        <span class="d-flex align-items-center flex-nowrap">
+          <span class="green">${suggestedProjectCorrect}</span>
+          <span>${suggestedProjectRemaining}</span>
+        </span>
+       
+      </div>
+      
+    </div>
+    <button class="btn btn-success mb-4" click.delegate="submit()">Voeg toe</button>
+  
+    <h6 class="au-animate fly-in fly-out" if.bind="activitiesToday.length > 0">Vandaag</h6>
+  
+    <ul class="list-group">
+      <li repeat.for="item of activitiesToday" class="au-animate fly-in fly-out list-group-item d-flex justify-content-between project-overview">
+        <span>${item.project.name}</span>
+        <span class="timetamp timestamp-total">
+          <font-awesome-icon class="mr-1" icon.bind="['fas','stopwatch']"></font-awesome-icon> 
+          ${item.totalHours | numeralFormat:'00'}u${item.totalMinutes | numeralFormat:'00'}
+        </span>
+        <div>
+          <div repeat.for="activity of item.activities" class="d-flex justify-content-end align-items-center flex-nowrap">            
+            <span class="text-danger mr-2">
+              <font-awesome-icon class="delete-icon" click.delegate="deleteActivity(activitiesToday, item, $index)" icon.bind="['fas','times-circle']"></font-awesome-icon> 
+            </span>
+            <span class="timestamp timestamp-left">${activity.startTime | momentFormat:'HHumm'}</span>
+            <span class="mx-2">
+              <font-awesome-icon icon.bind="['fas','arrow-right']"></font-awesome-icon> 
+            </span>
+            <span class="timestamp timestamp-right">${activity.endTime | momentFormat:'HHumm'}</span>         
+        </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="au-animate fly-in" if.bind="viewProjects">
+    <a href="#" click.delegate="goToOverview()"><font-awesome-icon icon.bind="['fas','arrow-left']"></font-awesome-icon> Terug</a>
+    <h6 class="mt-3">Projecten</h6>
+    <p class="text-muted text-italic" if.bind="!dc.projects || dc.projects.length == 0">Er werden nog geen projecten toegevoegd</p>
+    <ul class="list-group">
+      <li repeat.for="project of dc.projects" class="au-animate fly-in fly-out list-group-item d-flex justify-content-between project-edit">
+        <span>${project.name}</span>
+        <span class="text-danger">
+          <font-awesome-icon class="delete-icon" click.delegate="deleteProject(project)" icon.bind="['fas','times-circle']"></font-awesome-icon> 
+        </span>
+      </li>
+    </ul>
+  </div>
 
-        <div repeat.for="activity of item.activities" class="d-flex justify-content-end align-items-center flex-nowrap project-overview-details">
-          
-          <span class="text-danger mr-2">
-            <font-awesome-icon class="delete-icon" click.delegate="deleteActivity(activitiesToday, item, $index)" icon.bind="['fas','times-circle']"></font-awesome-icon> 
-          </span>
+  <div class="au-animate fly-in" if.bind="viewHistory">
+    <a href="#" click.delegate="goToOverview()"><font-awesome-icon icon.bind="['fas','arrow-left']"></font-awesome-icon> Terug</a>
+    <h6 class="my-3">Historiek</h6>
+    <p class="text-muted text-italic" if.bind="!dc.activities || dc.activities.length == 0">Er werden nog geen tijdsregistraties toegevoegd</p>
+    <div repeat.for="overview of historyOverviews" class="mb-3">
+      <h6>${overview.date | momentFormat:'DD/MM/YYYY'}</h6>
+      <ul class="list-group">
+        <li repeat.for="activity of overview.activities" class="au-animate fly-in fly-out list-group-item d-flex justify-content-between history-edit">
+          <span class="mr-auto">${activity.project.name}</span>
           <span class="timestamp timestamp-left">${activity.startTime | momentFormat:'HHumm'}</span>
           <span class="mx-2">
             <font-awesome-icon icon.bind="['fas','arrow-right']"></font-awesome-icon> 
           </span>
-          <span class="timestamp timestamp-right">${activity.endTime | momentFormat:'HHumm'}</span>         
-      </span>
-    </li>
-  </ul>
+          <span class="timestamp timestamp-right">${activity.endTime | momentFormat:'HHumm'}</span>   
+        </li>
+      </ul>
+    </div>
+  </div>
+
 </template>
