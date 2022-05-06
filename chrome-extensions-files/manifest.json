@@ -1,16 +1,15 @@
 {
   "name": "Timetracker",
-  "version": "0.01",
+  "version": "1.0",
   "description": "Register your worked hours throughout your day and get a nice overview afterwards!",
-	"browser_action": {
+	"action": {
 		"default_title": "Timetracker HTML",
-		"default_popup": "index.html"
+		"default_popup": "index.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
 	},
-  "manifest_version": 3,
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  }
-  
+  "manifest_version": 3
 }
