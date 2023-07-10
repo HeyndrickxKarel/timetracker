@@ -57,8 +57,8 @@
               <p class="mb-0" repeat.for="p of suggestedProjects">
                 <span if.bind="p.emptyPlaceholder">&nbsp;</span>
                 <span if.bind="!p.emptyPlaceholder" class="d-flex align-items-center flex-nowrap">
-                  <span class="green">${p.correctString}</span>
-                  <span>${p.remainingString}</span>
+                  <span class="green substring-label">${p.correctString}</span>
+                  <span class="substring-label">${p.remainingString}</span>
                 </span>
               </p>
             </div>

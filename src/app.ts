@@ -59,7 +59,9 @@ export class App {
       let suggestion = this.dc.projects.filter(p => p.name.toLowerCase().startsWith(this.projectName.toLowerCase()))[0];
 
       this.suggestedProjects = this.dc.projects.filter(p => p.name.toLowerCase().startsWith(this.projectName.toLowerCase())).map(p => {
-        return {project: p, correctString: p.name.substr(0, this.projectName.length), remainingString: p.name.substr(this.projectName.length)};
+        let obj ={project: p, correctString: p.name.substr(0, this.projectName.length), remainingString: p.name.substr(this.projectName.length)};
+        console.log(obj); 
+        return obj;
       });
     } 
   }
@@ -97,7 +99,6 @@ export class App {
 
   public submit(){
     if(this.projectName && this.projectName.length > 0){
-      console.log(this.suggestedProject)
 
       // Find out which project he is talking about, is it a new one -> add it, is it a known one -> use reference.
       let project;
@@ -107,7 +108,6 @@ export class App {
       } else {
         project = this.suggestedProject.project;
       }
-      console.log(project);
 
       
       //Format timestamps
