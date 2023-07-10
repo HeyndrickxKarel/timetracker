@@ -110,7 +110,7 @@
 
   <div class="au-animate fly-in" if.bind="viewHistory">
     <a href="#" click.delegate="goToOverview()"><font-awesome-icon icon.bind="['fas','arrow-left']"></font-awesome-icon> Terug</a>
-    <h6 class="my-3">Historiek</h6>
+    <h6 class="my-3">Historiek - Laatste 2 weken</h6>
     <p class="text-muted text-italic" if.bind="!dc.activities || dc.activities.length == 0">Er werden nog geen tijdsregistraties toegevoegd</p>
     <div repeat.for="overview of historyOverviews" class="mb-3">
       <h6>${overview.date | momentFormat:'DD/MM/YYYY'}</h6>

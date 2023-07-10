@@ -49,6 +49,7 @@ export class App {
   }
 
   public attached(){
+    this.clearHistoryOlderThan2Weeks();
     this.setOverview();
     this.focusNewLine();
   }
@@ -60,9 +61,10 @@ export class App {
 
       this.suggestedProjects = this.dc.projects.filter(p => p.name.toLowerCase().startsWith(this.projectName.toLowerCase())).map(p => {
         let obj ={project: p, correctString: p.name.substr(0, this.projectName.length), remainingString: p.name.substr(this.projectName.length)};
-        console.log(obj); 
         return obj;
       });
+      if(this.suggestedProjects.length > 0)
+      this.suggestedProject = this.suggestedProjects[0];
     } 
   }
 
@@ -108,7 +110,6 @@ export class App {
       } else {
         project = this.suggestedProject.project;
       }
-
       
       //Format timestamps
       let startTime = moment().hour(this.startHour).minute(this.startMinute);
@@ -237,7 +238,6 @@ export class App {
 
   public deleteProject(project: Project){
     let index = this.dc.projects.indexOf(project);
-    console.log(index);
     this.dc.projects.splice(index, 1);
     this.saveDataToStorage();
   }
@@ -249,10 +249,7 @@ export class App {
 
     let today = moment();
     while (today.isSameOrAfter(minDate, "day")) {
-      console.log(today);
       this.dc.activities.forEach(element => {
-        console.log(element.endTime);
-        console.log("equals today " + element.endTime.isSame(today, "day"));
       });
       let activies = this.dc.activities.filter(a => moment(a.endTime).isSame(today, "day")).sort((a, b) => a.startTime.valueOf() - b.startTime.valueOf());
       if(activies.length > 0){
@@ -264,5 +261,10 @@ export class App {
       }
       today = today.add(-1, "day");
     }
+  }
+
+  public clearHistoryOlderThan2Weeks(){
+    this.dc.activities = this.dc.activities.filter(a => a.startTime.isAfter(moment().add(-2, "weeks")));
+    this.saveDataToStorage();
   }
 }
