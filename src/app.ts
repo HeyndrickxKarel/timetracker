@@ -207,6 +207,11 @@ export class App {
       let indexInDc = this.dc.activities.findIndex(a => a.id == activity.id);
       this.dc.activities.splice(indexInDc, 1);
       this.saveDataToStorage();
+
+      this.startHour = activity.startTime.hour();
+      this.startMinute = activity.startTime.minute();
+      this.endHour = 0;
+      this.endMinute = 0;    
   }
 
   public goToProjects(){
