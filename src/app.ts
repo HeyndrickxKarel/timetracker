@@ -6,6 +6,7 @@ import moment = require("moment");
 import { ProjectOverview } from "resources/models/project-overview";
 import {BindingEngine} from 'aurelia-framework';
 import { HistoryOverview } from "resources/models/history-overview";
+import { SuggestedProject } from "resources/models/suggested-project";
 
 @autoinject
 export class App {
@@ -22,9 +23,12 @@ export class App {
 
   @observable
   public projectName: string;
-  public suggestedProject: Project;
-  public suggestedProjectCorrect: string;
-  public suggestedProjectRemaining: string;
+  public suggestedProject: SuggestedProject;
+
+  public suggestedProjects: SuggestedProject[];
+  public highlightedSuggestedProjectIndex: number;
+  public suggestionContainerInner: HTMLElement;
+
 
   public activitiesToday: ProjectOverview[] = [];
   public activitiesBefore: ProjectOverview[] = [];
@@ -50,44 +54,61 @@ export class App {
   }
 
   public projectNameChanged(){
+    this.clearSuggestions();
     if (this.projectName && this.projectName.length > 0){
       let suggestion = this.dc.projects.filter(p => p.name.toLowerCase().startsWith(this.projectName.toLowerCase()))[0];
-      if(suggestion){
-        this.suggestedProject = suggestion;
-        this.suggestedProjectCorrect = this.suggestedProject.name.substr(0, this.projectName.length);
-        this.suggestedProjectRemaining = this.suggestedProject.name.substr(this.projectName.length);
-      } else {
-        this.clearSuggestion();
-      }
 
-    } else {
-      this.clearSuggestion();
-    }
+      this.suggestedProjects = this.dc.projects.filter(p => p.name.toLowerCase().startsWith(this.projectName.toLowerCase())).map(p => {
+        return {project: p, correctString: p.name.substr(0, this.projectName.length), remainingString: p.name.substr(this.projectName.length)};
+      });
+    } 
   }
 
-  public clearSuggestion(){
+  public clearSuggestions(){
     this.suggestedProject = null;
-    this.suggestedProjectCorrect = null;
-    this.suggestedProjectRemaining = null;
+    this.suggestedProjects = [];
+    this.highlightedSuggestedProjectIndex = 0;
+    $(this.suggestionContainerInner).animate({top: 0}, 100, 'swing');
   }
 
   public keyDownInProjectName(e){
     if (e.keyCode === 13) { // enter key
       this.taskQueue.queueTask(() => this.submit())
     }
+    else if (e.keyCode === 38) // up 
+    {
+      this.scrollSuggestionContainer(false)
+    }
+    else if (e.keyCode === 40) // down 
+    {
+      this.scrollSuggestionContainer(true);
+    }
     return true;
+  }
+
+  public scrollSuggestionContainer(up: boolean){
+    if(up && (this.highlightedSuggestedProjectIndex == this.suggestedProjects.length - 1) || (!up && this.highlightedSuggestedProjectIndex == 0))
+    return;
+    this.highlightedSuggestedProjectIndex += (up? 1 : -1);
+    let newTop = -this.highlightedSuggestedProjectIndex * 24;
+    $(this.suggestionContainerInner).animate({top: newTop}, 100, 'swing');
+    this.suggestedProject = this.suggestedProjects[this.highlightedSuggestedProjectIndex];
   }
 
   public submit(){
     if(this.projectName && this.projectName.length > 0){
+      console.log(this.suggestedProject)
+
       // Find out which project he is talking about, is it a new one -> add it, is it a known one -> use reference.
       let project;
       if(!this.suggestedProject){
         project = {name: this.projectName} as Project;
         this.dc.projects.push(project);
       } else {
-        project = this.suggestedProject;
+        project = this.suggestedProject.project;
       }
+      console.log(project);
+
       
       //Format timestamps
       let startTime = moment().hour(this.startHour).minute(this.startMinute);
@@ -106,7 +127,7 @@ export class App {
       this.saveDataToStorage();
       
       // Clear and set fields
-      this.clearSuggestion();
+      this.clearSuggestions();
       this.setFields(activity);
       this.focusNewLine();
     }

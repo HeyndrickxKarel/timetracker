@@ -47,12 +47,24 @@
         <input value.bind="projectName" keydown.trigger="keyDownInProjectName($event)"  type="text"
         class="form-control auto-suggestion-first">
       </div>
-      <div class="col-6 d-flex align-items-center">
-        <span class="d-flex align-items-center flex-nowrap">
-          <span class="green">${suggestedProjectCorrect}</span>
-          <span>${suggestedProjectRemaining}</span>
-        </span>
-       
+      <div class="col-6">
+       <div class="suggestion-container-wrapper">
+         <div class="suggestion-container-overlay overlay-1"></div>
+         <div class="suggestion-container-overlay overlay-2"></div>
+        <div class="suggestion-container-positioner">
+          <div class="suggestion-container">
+            <div class="suggestion-container-inner" ref="suggestionContainerInner">
+              <p class="mb-0" repeat.for="p of suggestedProjects">
+                <span if.bind="p.emptyPlaceholder">&nbsp;</span>
+                <span if.bind="!p.emptyPlaceholder" class="d-flex align-items-center flex-nowrap">
+                  <span class="green">${p.correctString}</span>
+                  <span>${p.remainingString}</span>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+       </div>
       </div>
       
     </div>

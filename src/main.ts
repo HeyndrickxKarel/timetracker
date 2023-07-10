@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import * as numeral from "numeral";
 import "numeral/locales/nl-be";
+import "jquery";
 
 export function configure(aurelia: Aurelia): void {
   aurelia.use
