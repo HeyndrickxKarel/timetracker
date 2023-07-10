@@ -24,6 +24,7 @@ body{
     width: 720px;
     height: 720px;
     padding: 40px;
+    overflow: scroll;
 }
 .green {
     color: #11ab7c;
@@ -122,14 +123,17 @@ body{
     
 }
 
-.suggestion-container {
-    // border: 1px solid;
-    height: 24px;
+body {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
     &::-webkit-scrollbar {
         display: none;
     }
+}
+
+.suggestion-container {
+    // border: 1px solid;
+    height: 24px;
     position: relative;
 }
 .suggestion-container-inner {
